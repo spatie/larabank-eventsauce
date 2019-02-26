@@ -10,8 +10,8 @@ return [
      */
     'code_generation' => [
         [
-            'input_yaml_file' => null,
-            'output_file' => null,
+            'input_yaml_file' => app_path('Domain/Account/commands-and-events.yml'),
+            'output_file' => app_path('Domain/Account/commands-and-events.php'),
         ],
     ],
 

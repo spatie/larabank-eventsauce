@@ -5,7 +5,6 @@ namespace App\Domain\Account;
 use App\Domain\Account\Exceptions\CouldNotSubtractMoney;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviour;
-use Exception;
 use Spatie\LaravelEventSauce\Concerns\IgnoresMissingMethods;
 
 class AccountAggregateRoot implements AggregateRoot
@@ -19,7 +18,7 @@ class AccountAggregateRoot implements AggregateRoot
     /** @var int */
     private $accountLimit = -5000;
 
-    private $accountLimitHitInARow = 0;
+    private $insufficientFUndsInARow = 0;
 
     public function createAccount(CreateAccount $command)
     {
@@ -36,7 +35,6 @@ class AccountAggregateRoot implements AggregateRoot
 
     public function addMoney(AddMoney $command)
     {
-
         $this->recordThat(new MoneyAdded(
             $command->amount()
         ));
@@ -44,21 +42,20 @@ class AccountAggregateRoot implements AggregateRoot
 
     protected function applyMoneyAdded(MoneyAdded $event)
     {
-        $this->accountLimitHitInARow = 0;
+        $this->insufficientFUndsInARow = 0;
 
         $this->balance += $event->amount();
     }
 
     public function subtractMoney(SubtractMoney $command)
     {
-        if ($this->canSubtractAmount($command->amount())) {
-            $this->accountLimitHitInARow++;
-
-            //record event here
+        if (! $this->hasSufficientFundsToSubtractAmount($command->amount())) {
+            if ($this->seemsToBeBroke()) {
+                $this->recordThat(new SeemsToBeBroke());
+            }
 
             throw CouldNotSubtractMoney::notEnoughFunds($command->amount());
         }
-
 
         $this->recordThat(new MoneySubtracted(
             $command->amount()
@@ -67,13 +64,18 @@ class AccountAggregateRoot implements AggregateRoot
 
     protected function applyMoneySubtracted(MoneySubtracted $event)
     {
-        $this->accountLimitHitInARow = 0;
+        $this->insufficientFUndsInARow = 0;
 
         $this->balance -= $event->amount();
     }
 
-    protected function canSubtractAmount(int $amount): bool
+    protected function hasSufficientFundsToSubtractAmount(int $amount): bool
     {
         return $this->balance - $amount >= $this->accountLimit;
+    }
+
+    private function seemsToBeBroke()
+    {
+        $this->insufficientFUndsInARow >= 3;
     }
 }

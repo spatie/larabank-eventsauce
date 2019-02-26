@@ -40,3 +40,5 @@ events:
       amount: int
   AccountDeleted:
     fields:
+  InsufficientFunds:
+    fields:

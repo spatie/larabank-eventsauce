@@ -22,5 +22,6 @@ class AccountAggregateRootRepository extends AggregateRootRepository
     /** @var array */
     protected $queuedConsumers = [
         TransactionCountProjector::class,
+        OfferLoan::class,
     ];
 }
