@@ -36,6 +36,10 @@ class AccountAggregateRoot implements AggregateRoot
 
     public function subtractMoney(SubtractMoney $command)
     {
+        if (($this->balance - $command->amount()) < -5000) {
+            throw new Exception("You cannot go below -5000 on your account");
+        }
+
         $this->recordThat(new MoneySubtracted(
             $command->amount()
         ));
@@ -48,10 +52,6 @@ class AccountAggregateRoot implements AggregateRoot
 
     protected function applyMoneySubtracted(MoneySubtracted $event)
     {
-        if (($this->balance - $event->amount()) < -5000) {
-            throw new Exception("You cannot go below -5000 on your account");
-        }
-
         $this->balance -= $event->amount();
     }
 
