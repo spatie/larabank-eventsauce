@@ -19,6 +19,8 @@ class AccountAggregateRoot implements AggregateRoot
     /** @var int */
     private $accountLimit = -5000;
 
+    private $accountLimitHitInARow = 0;
+
     public function createAccount(CreateAccount $command)
     {
         $this->recordThat(new AccountCreated(
@@ -34,6 +36,8 @@ class AccountAggregateRoot implements AggregateRoot
 
     public function addMoney(AddMoney $command)
     {
+        $this->accountLimitHitInARow = 0;
+
         $this->recordThat(new MoneyAdded(
             $command->amount()
         ));
@@ -47,8 +51,14 @@ class AccountAggregateRoot implements AggregateRoot
     public function subtractMoney(SubtractMoney $command)
     {
         if ($this->canSubtractAmount($command->amount())) {
+            $this->accountLimitHitInARow++;
+
+            //record event here
+
             throw CouldNotSubtractMoney::notEnoughFunds($command->amount());
         }
+
+        $this->accountLimitHitInARow = 0;
 
         $this->recordThat(new MoneySubtracted(
             $command->amount()
