@@ -37,7 +37,8 @@ final class AccountCreated implements SerializableEvent
     {
         return new AccountCreated(
             (string) $payload['name'],
-            (int) $payload['user_id']);
+            (int) $payload['user_id']
+        );
     }
 
     public function toPayload(): array
@@ -80,7 +81,8 @@ final class MoneyAdded implements SerializableEvent
     public static function fromPayload(array $payload): SerializableEvent
     {
         return new MoneyAdded(
-            (int) $payload['amount']);
+            (int) $payload['amount']
+        );
     }
 
     public function toPayload(): array
@@ -121,7 +123,8 @@ final class MoneySubtracted implements SerializableEvent
     public static function fromPayload(array $payload): SerializableEvent
     {
         return new MoneySubtracted(
-            (int) $payload['amount']);
+            (int) $payload['amount']
+        );
     }
 
     public function toPayload(): array
