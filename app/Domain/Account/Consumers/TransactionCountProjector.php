@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Account\Projectors;
+namespace App\Domain\Account\Consumers;
 
 use App\Domain\Account\AccountCreated;
 use App\Domain\Account\AccountDeleted;

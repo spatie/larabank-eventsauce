@@ -18,7 +18,7 @@ class AccountAggregateRoot implements AggregateRoot
     /** @var int */
     private $accountLimit = -5000;
 
-    private $insufficientFUndsInARow = 0;
+    private $accountLimitHitInARow = 0;
 
     public function createAccount(CreateAccount $command)
     {
@@ -42,16 +42,16 @@ class AccountAggregateRoot implements AggregateRoot
 
     protected function applyMoneyAdded(MoneyAdded $event)
     {
-        $this->insufficientFUndsInARow = 0;
-
         $this->balance += $event->amount();
     }
 
     public function subtractMoney(SubtractMoney $command)
     {
         if (! $this->hasSufficientFundsToSubtractAmount($command->amount())) {
-            if ($this->seemsToBeBroke()) {
-                $this->recordThat(new SeemsToBeBroke());
+            $this->recordThat(new AccountLimitHit());
+
+            if ($this->needsMoreMoney()) {
+                $this->recordThat(new MoreMoneyNeeded());
             }
 
             throw CouldNotSubtractMoney::notEnoughFunds($command->amount());
@@ -64,7 +64,7 @@ class AccountAggregateRoot implements AggregateRoot
 
     protected function applyMoneySubtracted(MoneySubtracted $event)
     {
-        $this->insufficientFUndsInARow = 0;
+        $this->accountLimitHitInARow = 0;
 
         $this->balance -= $event->amount();
     }
@@ -74,8 +74,8 @@ class AccountAggregateRoot implements AggregateRoot
         return $this->balance - $amount >= $this->accountLimit;
     }
 
-    private function seemsToBeBroke()
+    private function needsMoreMoney()
     {
-        $this->insufficientFUndsInARow >= 3;
+        $this->accountLimitHitInARow >= 3;
     }
 }

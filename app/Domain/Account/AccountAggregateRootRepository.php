@@ -2,8 +2,8 @@
 
 namespace App\Domain\Account;
 
-use App\Domain\Account\Projectors\AccountProjector;
-use App\Domain\Account\Projectors\TransactionCountProjector;
+use App\Domain\Account\Consumers\AccountProjector;
+use App\Domain\Account\Consumers\TransactionCountProjector;
 use Spatie\LaravelEventSauce\AggregateRootRepository;
 
 /** @method AccountAggregateRoot retrieve */

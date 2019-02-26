@@ -163,11 +163,11 @@ final class AccountDeleted implements SerializableEvent
     }
 }
 
-final class SeemsToBeBroke implements SerializableEvent
+final class AccountLimitHit implements SerializableEvent
 {
     public static function fromPayload(array $payload): SerializableEvent
     {
-        return new SeemsToBeBroke();
+        return new AccountLimitHit();
     }
 
     public function toPayload(): array
@@ -178,9 +178,30 @@ final class SeemsToBeBroke implements SerializableEvent
     /**
      * @codeCoverageIgnore
      */
-    public static function with(): SeemsToBeBroke
+    public static function with(): AccountLimitHit
     {
-        return new SeemsToBeBroke();
+        return new AccountLimitHit();
+    }
+}
+
+final class MoreMoneyNeeded implements SerializableEvent
+{
+    public static function fromPayload(array $payload): SerializableEvent
+    {
+        return new MoreMoneyNeeded();
+    }
+
+    public function toPayload(): array
+    {
+        return [];
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public static function with(): MoreMoneyNeeded
+    {
+        return new MoreMoneyNeeded();
     }
 }
 

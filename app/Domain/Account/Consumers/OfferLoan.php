@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Domain\Account;
+namespace App\Domain\Account\Consumers;
 
+use App\Domain\Account\MoreMoneyNeeded;
 use App\Mail\LoanProposalMail;
 use EventSauce\EventSourcing\Consumer;
 use EventSauce\EventSourcing\Message;
@@ -13,7 +14,7 @@ class OfferLoan implements Consumer
     {
         $event = $message->event();
 
-        if (! $event instanceof SeemsToBeBroke) {
+        if (! $event instanceof MoreMoneyNeeded) {
             return;
         }
 
