@@ -42,6 +42,8 @@ class AccountAggregateRoot implements AggregateRoot
 
     protected function applyMoneyAdded(MoneyAdded $event)
     {
+        $this->accountLimitHitInARow = 0;
+
         $this->balance += $event->amount();
     }
 
@@ -62,6 +64,11 @@ class AccountAggregateRoot implements AggregateRoot
         ));
     }
 
+    public function applyAccountLimitHit()
+    {
+        $this->accountLimitHitInARow++;
+    }
+
     protected function applyMoneySubtracted(MoneySubtracted $event)
     {
         $this->accountLimitHitInARow = 0;
@@ -74,8 +81,8 @@ class AccountAggregateRoot implements AggregateRoot
         return $this->balance - $amount >= $this->accountLimit;
     }
 
-    private function needsMoreMoney()
+    protected function needsMoreMoney()
     {
-        $this->accountLimitHitInARow >= 3;
+        return $this->accountLimitHitInARow >= 3;
     }
 }

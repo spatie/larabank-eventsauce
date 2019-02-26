@@ -2,6 +2,7 @@
 
 namespace App\Domain\Account\Consumers;
 
+use App\Account;
 use App\Domain\Account\MoreMoneyNeeded;
 use App\Mail\LoanProposalMail;
 use EventSauce\EventSourcing\Consumer;

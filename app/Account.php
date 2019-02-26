@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Account extends Model
 {
@@ -11,6 +12,11 @@ class Account extends Model
     public static function uuid(string $uuid): self
     {
         return static::where('uuid', $uuid)->first();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function addMoney(int $amount)

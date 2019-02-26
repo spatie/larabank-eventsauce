@@ -3,6 +3,7 @@
 namespace App\Domain\Account;
 
 use App\Domain\Account\Consumers\AccountProjector;
+use App\Domain\Account\Consumers\OfferLoan;
 use App\Domain\Account\Consumers\TransactionCountProjector;
 use Spatie\LaravelEventSauce\AggregateRootRepository;
 
