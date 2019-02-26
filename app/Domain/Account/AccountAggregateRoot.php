@@ -2,6 +2,7 @@
 
 namespace App\Domain\Account;
 
+use App\Domain\Account\Exceptions\CouldNotSubtractMoney;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviour;
 use Exception;
@@ -46,7 +47,7 @@ class AccountAggregateRoot implements AggregateRoot
     public function subtractMoney(SubtractMoney $command)
     {
         if ($this->canSubtractAmount($command->amount())) {
-            throw new Exception("You cannot go below {$this->accountLimit} on your account");
+            throw CouldNotSubtractMoney::notEnoughFunds($command->amount());
         }
 
         $this->recordThat(new MoneySubtracted(
