@@ -34,6 +34,11 @@ class AccountAggregateRoot implements AggregateRoot
         ));
     }
 
+    protected function applyMoneyAdded(MoneyAdded $event)
+    {
+        $this->balance += $event->amount();
+    }
+
     public function subtractMoney(SubtractMoney $command)
     {
         if (($this->balance - $command->amount()) < -5000) {
@@ -45,18 +50,8 @@ class AccountAggregateRoot implements AggregateRoot
         ));
     }
 
-    protected function applyMoneyAdded(MoneyAdded $event)
-    {
-        $this->balance += $event->amount();
-    }
-
     protected function applyMoneySubtracted(MoneySubtracted $event)
     {
         $this->balance -= $event->amount();
-    }
-
-    public function balance(): int
-    {
-        return $this->balance;
     }
 }
