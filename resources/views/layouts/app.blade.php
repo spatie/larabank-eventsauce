@@ -41,6 +41,7 @@
         </header>
     </div>
     <main class="max-w-lg mx-auto px-4">
+        @include('flash::message')
         @yield('content')
     </main>
 </body>
