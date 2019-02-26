@@ -12,7 +12,11 @@ class AccountAggregateRoot implements AggregateRoot
     use AggregateRootBehaviour,
         IgnoresMissingMethods;
 
+    /** @var int */
     private $balance = 0;
+
+    /** @var int */
+    private $accountLimit = -5000;
 
     public function createAccount(CreateAccount $command)
     {
@@ -41,8 +45,8 @@ class AccountAggregateRoot implements AggregateRoot
 
     public function subtractMoney(SubtractMoney $command)
     {
-        if (($this->balance - $command->amount()) < -5000) {
-            throw new Exception("You cannot go below -5000 on your account");
+        if ($this->canSubtractAmount($command->amount())) {
+            throw new Exception("You cannot go below {$this->accountLimit} on your account");
         }
 
         $this->recordThat(new MoneySubtracted(
@@ -53,5 +57,10 @@ class AccountAggregateRoot implements AggregateRoot
     protected function applyMoneySubtracted(MoneySubtracted $event)
     {
         $this->balance -= $event->amount();
+    }
+
+    protected function canSubtractAmount(int $amount): bool
+    {
+        return $this->balance - $amount >= $this->accountLimit;
     }
 }
