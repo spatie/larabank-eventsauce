@@ -3,10 +3,11 @@
 namespace App\Domain\Account;
 
 use App\Mail\LoanProposalMail;
+use EventSauce\EventSourcing\Consumer;
 use EventSauce\EventSourcing\Message;
 use Illuminate\Support\Facades\Mail;
 
-class OfferLoan
+class OfferLoan implements Consumer
 {
     public function handle(Message $message)
     {
