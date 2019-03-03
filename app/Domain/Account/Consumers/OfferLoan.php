@@ -5,7 +5,7 @@ namespace App\Domain\Account\Consumers;
 use App\Account;
 use App\Domain\Account\MoreMoneyNeeded;
 use App\Mail\LoanProposalMail;
-use EventSaucCe\EventSourcing\Consumer;
+use EventSauce\EventSourcing\Consumer;
 use EventSauce\EventSourcing\Message;
 use Illuminate\Support\Facades\Mail;
 
