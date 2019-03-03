@@ -16,6 +16,7 @@ class AccountCommandHandler
     {
         $aggregateRootId = $command->identifier();
 
+
         $aggregateRoot = $this->repository->retrieve($aggregateRootId);
 
         try {
