@@ -19,10 +19,10 @@
         "fideloper/proxy": "^4.0",
         "laracasts/flash": "^3.0",
         "laravel/framework": "5.8.*",
-        "laravel/horizon": "^2.0",
-        "laravel/telescope": "^1.0",
+        "laravel/horizon": "^3.0",
+        "laravel/telescope": "^2.0",
         "laravel/tinker": "^1.0",
-        "spatie/laravel-eventsauce": "*",
+        "spatie/laravel-eventsauce": "^1.0",
         "spatie/laravel-tail": "^3.2"
     },
     "require-dev": {
