@@ -16,9 +16,16 @@ class AccountCommandHandler
     {
         $aggregateRootId = $command->identifier();
 
-
+        /*
+         * Retrieve all events for the account and apply them to a
+         * fresh copy of the aggregate root.
+         */
         $aggregateRoot = $this->repository->retrieve($aggregateRootId);
 
+        /*
+         * Pass the command to the aggregate root. The aggregate root will
+         * record new events.
+         */
         try {
             if ($command instanceof CreateAccount) {
                 $aggregateRoot->createAccount($command);
@@ -30,6 +37,9 @@ class AccountCommandHandler
                 $aggregateRoot->subtractMoney($command);
             }
         } finally {
+            /*
+             * Apply the new events and persist them.
+             */
             $this->repository->persist($aggregateRoot);
         }
     }
