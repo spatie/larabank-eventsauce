@@ -47,6 +47,8 @@ class AccountAggregateRoot implements AggregateRoot
 
     protected function applyMoneyAdded(MoneyAdded $event)
     {
+        // \Log::info('apply money subtracted' . $event->amount());
+
         $this->accountLimitHitInARow = 0;
 
         $this->balance += $event->amount();
@@ -71,17 +73,17 @@ class AccountAggregateRoot implements AggregateRoot
 
     protected function applyMoneySubtracted(MoneySubtracted $event)
     {
-        $this->accountLimitHitInARow = 0;
+        // \Log::info('apply money subtracted' . $event->amount());
 
         $this->balance -= $event->amount();
+
+        $this->accountLimitHitInARow = 0;
     }
 
     public function applyAccountLimitHit()
     {
         $this->accountLimitHitInARow++;
     }
-
-
 
     protected function hasSufficientFundsToSubtractAmount(int $amount): bool
     {
