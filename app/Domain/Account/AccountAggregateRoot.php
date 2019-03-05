@@ -28,6 +28,11 @@ class AccountAggregateRoot implements AggregateRoot
         ));
     }
 
+    public function applyCreateAccount()
+    {
+
+    }
+
     public function deleteAccount(DeleteAccount $command)
     {
         $this->recordThat(new AccountDeleted());
@@ -64,17 +69,19 @@ class AccountAggregateRoot implements AggregateRoot
         ));
     }
 
-    public function applyAccountLimitHit()
-    {
-        $this->accountLimitHitInARow++;
-    }
-
     protected function applyMoneySubtracted(MoneySubtracted $event)
     {
         $this->accountLimitHitInARow = 0;
 
         $this->balance -= $event->amount();
     }
+
+    public function applyAccountLimitHit()
+    {
+        $this->accountLimitHitInARow++;
+    }
+
+
 
     protected function hasSufficientFundsToSubtractAmount(int $amount): bool
     {
